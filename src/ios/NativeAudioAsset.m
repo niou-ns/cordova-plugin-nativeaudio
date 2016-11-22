@@ -1,10 +1,10 @@
 //
-// 
+//
 //  NativeAudioAsset.m
 //  NativeAudioAsset
 //
 //  Created by Sidney Bofah on 2014-06-26.
-//
+//  Edited by Krzysztof Pintscher on 2016-11-20
 
 #import "NativeAudioAsset.h"
 
@@ -17,17 +17,17 @@ static const CGFloat FADE_DELAY = 0.08;
 {
     self = [super init];
     if(self) {
-        voices = [[NSMutableArray alloc] init];  
-        
+        voices = [[NSMutableArray alloc] init];
+
         NSURL *pathURL = [NSURL fileURLWithPath : path];
-        
+
         for (int x = 0; x < [numVoices intValue]; x++) {
             AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithContentsOfURL:pathURL error: NULL];
             player.volume = volume.floatValue;
             [player prepareToPlay];
             [voices addObject:player];
             [player setDelegate:self];
-            
+
             if(delay)
             {
                 fadeDelay = delay;
@@ -35,10 +35,10 @@ static const CGFloat FADE_DELAY = 0.08;
             else {
                 fadeDelay = [NSNumber numberWithFloat:FADE_DELAY];
             }
-            
+
             initialVolume = volume;
         }
-        
+
         playIndex = 0;
     }
     return(self);
@@ -60,7 +60,7 @@ static const CGFloat FADE_DELAY = 0.08;
 - (void)playWithFade
 {
     AVAudioPlayer * player = [voices objectAtIndex:playIndex];
-    
+
     if (!player.isPlaying)
     {
         [player setCurrentTime:0.0];
@@ -98,10 +98,10 @@ static const CGFloat FADE_DELAY = 0.08;
 - (void)stopWithFade
 {
     BOOL shouldContinue = NO;
-    
+
     for (int x = 0; x < [voices count]; x++) {
         AVAudioPlayer * player = [voices objectAtIndex:x];
-        
+
         if (player.isPlaying && player.volume > FADE_STEP) {
             player.volume -= FADE_STEP;
             shouldContinue = YES;
@@ -112,7 +112,7 @@ static const CGFloat FADE_DELAY = 0.08;
             player.currentTime = 0;
         }
     }
-    
+
     if(shouldContinue) {
         [self performSelector:@selector(stopWithFade) withObject:nil afterDelay:fadeDelay.floatValue];
     }
@@ -129,7 +129,7 @@ static const CGFloat FADE_DELAY = 0.08;
     playIndex = playIndex % [voices count];
 }
 
-- (void) unload 
+- (void) unload
 {
     [self stop];
     for (int x = 0; x < [voices count]; x++) {

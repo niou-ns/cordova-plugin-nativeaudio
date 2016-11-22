@@ -4,10 +4,10 @@
 //  NativeAudioAsset
 //
 //  Created by Sidney Bofah on 2014-06-26.
-//
+//  Edited by Krzysztof Pintscher on 2016-11-20
 
 #import <Foundation/Foundation.h>
-#import <AVFoundation/AVAudioPlayer.h>
+#import <AVFoundation/AVFoundation.h>
 
 typedef void (^CompleteCallback)(NSString*);
 
